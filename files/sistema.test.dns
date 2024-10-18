@@ -12,6 +12,17 @@ $ORIGIN sistema.test.
 			  86400		; Retry
 			2419200		; Expire
 			  86400 )	; Negative Cache TTL
-;
-@			IN		NS		tierra
-tierra		IN		A		192.168.57.10
+
+; Name servers NS 
+@		IN		NS		tierra
+@		IN		NS		venus
+
+; Aliases
+ns1		IN		CNAME	tierra
+ns2		IN		CNAME	venus
+
+; Servers directions
+tierra		IN		A		192.168.57.103
+venus		IN		A 		192.168.57.102
+marte		IN		A 		192.168.57.104
+mail		IN		CNAME	marte
