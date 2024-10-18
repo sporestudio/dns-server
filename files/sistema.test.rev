@@ -11,6 +11,10 @@ $ORIGIN sistema.test.
 			  86400		; Retry
 			2419200		; Expire
 			  86400 )	; Negative Cache TTL
-;
+; Name Servers
 @		IN		NS		tierra
+@		IN		NS		venus
+
+; Reverse directions
 103		IN		PTR		tierra
+102		IN		PTR		venus
