@@ -9,10 +9,12 @@
 zone "sistema.test" {
     type master;
     file "/var/lib/bind/sistema.test.dns";
+    allow-transfer { 192.168.57.102; };
 };
 
 zone "57.168.192.in-addr.arpa" {
     type master;
-    file "/var/lib/bind/192.168.57.dns";
+    file "/var/lib/bind/sistema.test.rev";
+    allow-transfer { 192.168.57.102; };
 };
 
