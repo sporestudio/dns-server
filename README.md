@@ -213,7 +213,7 @@ The DNS is configured for the `sistema.test` domain with the following key eleme
         }
         ```
 
-       > [!IMPORTANT]
+       > [!IMPORTANT] 
        > It is necessary to make sure that the user and group that owns the zone files is `bind`, so that it can have read permissions to execute them and perform the zone transfer.
 
     - **Venus provisioning**: In the case of venus, we provision its local configuration file `named.conf.local`.
