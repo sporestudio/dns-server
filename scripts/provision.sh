@@ -14,14 +14,13 @@ function general_provision() {
     apt-get update -y && apt-get upgrade -y
     echo -e "Instaling bind9 and utils in $machine_name..."
     apt-get install -y bind9 bind9utils bind9-doc
-}
 
-
-function common_setup() {
+    # Common config files
     echo -e "Provisioning the dns server, master and slaves..."
     cp -v /vagrant/files/named /etc/default/
     cp -v /vagrant/files/named.conf.options /etc/bind/
 }
+
 
 
 function tierra_setup() {
@@ -44,11 +43,9 @@ function venus_setup() {
 function main() {
     if [ "$machine_name" == "tierra" ]; then
         general_provision
-        common_setup
         tierra_setup
     elif [ "$machine_name" == "venus" ]; then
         general_provision
-        common_setup
         venus_setup
     else
         echo -e "Machine not recognized"
