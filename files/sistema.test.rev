@@ -10,7 +10,7 @@ $ORIGIN 57.168.192.in-addr.arpa.
 			 604800		; Refresh
 			  86400		; Retry
 			2419200		; Expire
-			  86400 )	; Negative Cache TTL
+			   7200 )	; Negative Cache TTL
 ; Name Servers
 @		IN		NS		tierra.sistema.test.
 @		IN		NS		venus.sistema.test.
