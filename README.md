@@ -1,4 +1,10 @@
-# DNS SERVER
+<div align="center">
+    <h1>DNS SERVER</h1>
+</div>
+
+<div align="center">
+    <img src=".assets/diagram/dns-diagram.png" alt="zone-transfer"/>
+</div>
 
 ## :snowflake: Description
 This project implements a DNS service using [BIND](https://www.isc.org/bind/) (Berkeley Internet Name Domain) on two virtual servers configured with Vagrant: **a master server and a slave server**. The main goal is to provide a redundant DNS infrastructure by transferring zone from the master to the slave.
@@ -46,6 +52,17 @@ The configuration of zone files and BIND settings are handled by configuration f
 
 #### Configuration files
 
+- `named`: Here we will configure the server to only process requests using the IPv4 protocol. To do this we will add the -4 parameter in options. This file will be located in `/etc/default/`.
+
+    ```bash
+    #
+    # run resolvconf?
+    RESOLVCONF=no
+
+    # startup options for the server
+    OPTIONS="-u bind -4"
+    ```    
+
 - `named.conf.options`: In this file you configure general settings that affect the behavior of the server globally. Some of the key settings that can be defined in this file include:
   - **Forwarder**: Specifies external DNS servers to which the BIND server will send queries that it cannot resolve locally. In our case, they will be sent to the address `208.67.222.222` ([OpenDNS](https://www.opendns.com/)).
   - **ACLs (Access Control Lists)**: Defines rules that control access to the DNS server. In our case we have defined the “trusted” networks and the listening addresses that will listen on port 53 for requests.
@@ -80,9 +97,9 @@ The configuration of zone files and BIND settings are handled by configuration f
 
     ```bash
     zone "sistema.test" {
-    type master;
-    file "/var/lib/bind/sistema.test.dns";
-    allow-transfer { 192.168.57.102; };
+        type master;
+        file "/var/lib/bind/sistema.test.dns";
+        allow-transfer { 192.168.57.102; };
     };
 
     zone "57.168.192.in-addr.arpa" {
@@ -96,9 +113,9 @@ The configuration of zone files and BIND settings are handled by configuration f
 
     ```bash
     zone "sistema.test" {
-    type slave;
-    file "/var/lib/bind/sistema.test.dns";
-    masters { 192.168.57.103; };
+        type slave;
+        file "/var/lib/bind/sistema.test.dns";
+        masters { 192.168.57.103; };
     };
 
     zone "57.168.192.in-addr.arpa" {
@@ -213,9 +230,6 @@ The DNS is configured for the `sistema.test` domain with the following key eleme
         }
         ```
 
-> [!IMPORTANT] 
-> It is necessary to make sure that the user and group that owns the zone files is `bind`, so that it can have read permissions to execute them and perform the zone transfer.
-
     - **Venus provisioning**: In the case of venus, we provision its local configuration file `named.conf.local`.
 
         ```bash
@@ -245,6 +259,9 @@ The DNS is configured for the `sistema.test` domain with the following key eleme
     main
     ```
 
+> [!IMPORTANT] 
+> It is necessary to make sure that the user and group that owns the zone files is `bind`, so that it can have read permissions to execute them and perform the zone transfer.
+
 ## :wrench: Setup
 To make the automatic deployment of the whole project we only have to enter the following command inside the working directory:
 
@@ -253,7 +270,7 @@ $ vagrant up
 ```
 
 ## :snowflake: Functional Checks
-Una vez configurado el proyecto, puedes realizar varias comprobaciones para asegurarte de que el DNS funciona correctamente.
+Once the project is configured, we can perform several checks to make sure that the DNS is working correctly.
 
 ### Zone transfer
 On the slave (venus), we can execute the following command to force the zone transfer:
