@@ -1,15 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby : value
 
-
-$script = <<-SHELL 
-  apt-get update -y && apt-get upgrade -y
-  apt-get install -y bind9 bind9utils bind9-doc
-SHELL
-
 Vagrant.configure("2") do |config|
   config.vm.box = "debian/bookworm64"
-  config.vm.provision "shell", inline: $script
   config.vm.box_check_update = false
   config.ssh.insert_key = false
   config.vm.provider :virtualbox do |vb|
@@ -21,25 +14,17 @@ Vagrant.configure("2") do |config|
     master.vm.network "private_network", ip: "192.168.57.103"
     master.vm.hostname = "tierra"
 
-    master.vm.provision "shell", inline: <<-SHELL 
-      cp -v /vagrant/files/named /etc/default/
-      cp -v /vagrant/files/tierra/named.conf.local /etc/bind/
-      cp -v /vagrant/files/sistema.test.dns /var/lib/bind/
-      cp -v /vagrant/files/sistema.test.rev /var/lib/bind/ 
-      systemctl restart named
-    SHELL
+    master.vm.provision "shell", 
+      path: "scripts/provision.sh",
+      args: ["tierra"]
   end
 
   config.vm.define :venus do |slave|
     slave.vm.network "private_network", ip: "192.168.57.102"
     slave.vm.hostname = "venus"
 
-    slave.vm.provision "shell", inline: <<-SHELL
-      cp -v /vagrant/files/named /etc/default/
-      cp -v /vagrant/files/venus/named.conf.local /etc/bind/
-      cp -v /vagrant/files/sistema.test.dns /var/lib/bind/
-      cp -v /vagrant/files/sistema.test.rev /var/lib/bind/ 
-      systemctl restart named
-    SHELL
+    slave.vm.provision "shell", 
+      path: "scripts/provision.sh",
+      args: ["venus"]
   end
 end
